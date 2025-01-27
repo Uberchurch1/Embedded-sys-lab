@@ -66,3 +66,5 @@ Group6@EmbeddedG6:~ $ cat /sys/class/thermal/thermal_zone0/temp
 Group6@EmbeddedG6:~ $ vcgencmd pmic_read_adc EXT5V_V
      EXT5V_V volt(24)=5.16704000V
 ```
+Storage: 30656011 blocks total, 29158068 blocks free (Block size: 4096 bytes)
+IP Address: 127.0.1.1
