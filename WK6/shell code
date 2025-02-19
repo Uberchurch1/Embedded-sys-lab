@@ -12,3 +12,18 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 Group6@EmbeddedG6:~ $ ifconfig
 wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 10.144.113.38
+connecting...
+listening to staion
+recieved Station ID: 2 | Light Info: 727.92 lux
+recieved Station ID: 2 | Light Info: 736.25 lux
+recieved Station ID: 2 | Light Info: 731.25 lux
+recieved Station ID: 2 | Light Info: 729.58 lux
+recieved Station ID: 2 | Light Info: 722.92 lux
+recieved Station ID: 2 | Light Info: 717.50 lux
+recieved Station ID: 2 | Light Info: 692.92 lux
+recieved Station ID: 2 | Light Info: 688.75 lux
+recieved Station ID: 2 | Light Info: 706.25 lux
+recieved Station ID: 2 | Light Info: 706.25 lux
+recieved Station ID: 2 | Light Info: 696.67 lux
+recieved Station ID: 2 | Light Info: 691.25 lux
+recieved Station ID: 2 | Light Info: 687.50 lux
