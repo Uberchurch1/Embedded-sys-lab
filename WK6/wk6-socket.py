@@ -1,8 +1,8 @@
 import socket
 
 # Server configuration
-SERVER_IP = '192.168.1.100'  # Replace with the Pi's IP address
-SERVER_PORT = 12345
+SERVER_IP = '10.144.113.38'
+SERVER_PORT = 8000
 
 # Create a socket object
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
