@@ -1,0 +1,5 @@
+Group6@EmbeddedG6:~ $ ollama list
+NAME                ID              SIZE      MODIFIED       
+moondream:latest    55fc3abd3867    1.7 GB    5 minutes ago     
+llama3.2:latest     a80c4f17acd5    2.0 GB    14 minutes ago    
+Group6@EmbeddedG6:~ $ 
