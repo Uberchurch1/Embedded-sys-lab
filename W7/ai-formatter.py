@@ -3,8 +3,8 @@ from pydantic import BaseModel
 from typing import List
 
 class color(BaseModel):
-    color1: str
-    colpercent1: int
+    colorName: str
+    colorRatio: int
 
 class colorList(BaseModel):
     colors: List[color]
@@ -13,7 +13,7 @@ response = chat(
     messages=[
         {
             'role': 'user',
-            'content': 'List the names and percentages of colors of paint needed to make the color purple',
+            'content': 'List the names of colors of paint(as colorName) and their respective ratios(as colorRatio) needed to make the color purple',
         }
     ],
     model='llama3.2',
