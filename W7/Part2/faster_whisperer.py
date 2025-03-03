@@ -2,6 +2,8 @@ import sounddevice as sd
 import numpy as np
 import wave
 from faster_whisper import WhisperModel
+#import asyncio
+import threading
 
 is_recording = False
 filename = "recorded_audio.wav"
@@ -12,21 +14,25 @@ def start_recording(samplerate=44100):
     print("Recording started... Press stop to end.")
 
     def record():
+        global filename
         audio_data = []
         with sd.InputStream(samplerate=samplerate, channels=1, dtype=np.int16) as stream:
             while is_recording:
                 data, _ = stream.read(samplerate // 10)  # Read in 0.1s chunks
                 audio_data.append(data)
-        
-        # Save the recorded audio
+            
+            # Save the recorded audio
         audio_array = np.concatenate(audio_data, axis=0)
         with wave.open(filename, "wb") as wf:
             wf.setnchannels(1)
             wf.setsampwidth(2)
             wf.setframerate(samplerate)
             wf.writeframes(audio_array.tobytes())
-        
+            
         print("Recording saved:", filename)
+        
+
+    threading.Thread(target=record, daemon=True).start()
 
 def stop_recording():
     """Stops recording audio."""
@@ -57,3 +63,5 @@ if __name__ == "__main__":
     input("Press Enter to stop recording...")  # Simulate user stopping
     result = stop_recording_and_transcribe(lang="fr")  # Change "fr" to any other language
     print("Final Transcription:", result)
+
+
