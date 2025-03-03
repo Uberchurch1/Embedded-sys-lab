@@ -1,35 +1,34 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-import time
 from faster_whisperer import *
-root = Tk()#initializes a tk GUI
+
+# Initialize Tkinter
+root = Tk()
+root.title("Airport Translator")
 
 recArray = ["Stop Recording", "Start Recording"]
 titleArray = ["Recording...", "Translator"]
 recVar = 1
 
+# UI Elements
+frm = ttk.Frame(root, padding=10)
+frm.grid()
 
-name_var = tk.StringVar()
-passw_var = tk.StringVar()
-name = None
-passw = None
-
-frm = ttk.Frame(root, padding=10)#sets the padding around the border of the window
-frm.grid()#sets the window to grid mode instead of place mode
-title = ttk.Label(frm, text=titleArray[recVar])#creates a text label
+title = ttk.Label(frm, text=titleArray[recVar])
 title.grid(column=0, row=0)
-quitBut = ttk.Button(frm, text="Quit", command=root.destroy)#creates a clickable button that closes the window
+
+quitBut = ttk.Button(frm, text="Quit", command=root.destroy)
 quitBut.grid(column=3, row=3)
+
 recBut = ttk.Button(frm, text="Start Recording")
 recBut.grid(column=2, row=3)
 
 subBut = ttk.Button(frm, text="Transcribe Audio")
 subBut.grid(column=2, row=2)
 
-
 def toggleRec():
-    global recVar, recArray, toggleBut, rec
+    global recVar, recArray
     if recVar == 1:
         recVar = 0
         start_recording()
@@ -37,16 +36,28 @@ def toggleRec():
         recVar = 1
         stop_recording()
     recBut.config(text=recArray[recVar])
+    title.config(text=titleArray[recVar])
 
 def transcribe():
+    """Creates a new window and displays the transcribed text."""
+    textScript = transcribe_audio()  # Transcribe the last recorded audio
+
     top = Toplevel()
     top.title("Transcription")
-    top.mainloop()
-    textScript = transcribe_audio()
-    transcript = ttk.label(top, text=textScript)
+    
+    transcript_label = ttk.Label(top, text=textScript, wraplength=400, padding=10)
+    transcript_label.pack(pady=10)
 
+    # Add Copy Button
+    def copy_to_clipboard():
+        root.clipboard_clear()
+        root.clipboard_append(textScript)
+        root.update()
+    
+    copy_button = ttk.Button(top, text="Copy to Clipboard", command=copy_to_clipboard)
+    copy_button.pack(pady=5)
 
 subBut.config(command=transcribe)
 recBut.config(command=toggleRec)
-root.mainloop()#runs window program
 
+root.mainloop()
