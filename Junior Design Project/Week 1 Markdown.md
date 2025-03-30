@@ -2,10 +2,9 @@
 
 * *Mar 25 3:00-5:00pm (out of class)*: Worked on setting things up and researching information 
 	* Created a dedicated project folder in the raspberry pi
-	* Set up markdown file in GitHub
 	* Created shared doc to share information 
 	* Installed DAW (Reaper)
-	* Set Up camera
+	* Set up camera
 	* Conducted research (OpenCV vs MediaPipe)
 
 | **selfie with lab background** | **pi time with lab background** |
@@ -16,7 +15,7 @@
 
 *Mar 26 12:45-2:35pm (In class)*: Continued setting things up and researching; decided to use a different raspberry pi with more RAM, and installed all the necessary packages on that one.
 * Installed OpenCV and MediaPipe
-* Installed Reaper and RTMIDI Python
+* Installed Reaper and rtmidi Python
 * Installed JupyterNotebook and PyCharms IDE
 * Continued research on OpenCV and MediaPipe
 *Mar 26 2:35-3:35pm (In class)*: Began working on coding basic hand recognition and gesture recognition
