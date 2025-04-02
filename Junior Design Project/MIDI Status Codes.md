@@ -1,9 +1,12 @@
 http://www.opensound.com/pguide/midi/midi5.html
 
 Listing of MIDI Status Codes
-                 TABLE 1: Summary of MIDI Status & Data Bytes
-  (adapted from "MIDI by the Numbers" by D. Valenti, Elec Musician mag 2/88)
 
+TABLE 1: Summary of MIDI Status & Data Bytes
+
+(adapted from "MIDI by the Numbers" by D. Valenti, Elec Musician mag 2/88)
+
+```
             STATUS BYTE                        |          DATA BYTES
 ------------------------------------------------------------------------------
    1st Byte Value |  Function                  |    2nd        |    3rd
@@ -141,3 +144,8 @@ Listing of MIDI Status Codes
 
  ** Note: System Exclusive (data dump) 2nd byte= Vendor ID followed by more
           data bytes and ending with EOX.
+```
+
+https://learn.sparkfun.com/tutorials/midi-tutorial/all
+![image](https://github.com/user-attachments/assets/1fbfd302-f6ac-4594-b883-ef7f88864648)
+
