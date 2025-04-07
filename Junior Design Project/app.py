@@ -15,7 +15,6 @@ from utils import CvFpsCalc
 from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
-#|------------------|
 import MidiFunc as mf
 
 
@@ -23,12 +22,23 @@ class MIDImsg():
     def __init__(self, Note, Channel):
         self.note = Note
         self.chan = Channel
+        self.status = False
     
     def NoteOn(self):
-        mf.StartNote(self.note)
+        if self.status == False:
+            mf.StartNote(self.note)
+            self.status = True
+            return 0
+        else:
+            return 1
         
     def NoteOff(self):
-        mf.StopNote(self.note)
+        if self.status == True:
+            self.status = False
+            mf.StopNote(self.note)
+            return 0
+        else:
+            return 1
         
     def ChangeNote(self, Note):
         self.NoteOff()
@@ -207,20 +217,20 @@ def main():
                     if LeftHand == None:
                         LeftHand = MIDImsg(60, 0)
                     if hand_sign_id == 0:
-                        LeftHand.NoteOn()
+                        print(LeftHand.NoteOn())
                     if hand_sign_id == 1:
-                        LeftHand.NoteOff()
-                    if hand_sign_id == 3:
-                        LeftHand.DelMIDI()
+                        print(LeftHand.NoteOff())
+#                    if hand_sign_id == 3:
+#                        LeftHand.DelMIDI()
                 elif handedness.classification[0].index == 1:
                     if RightHand == None:
                         RightHand = MIDImsg(72, 1)
                     if hand_sign_id == 0:
-                        RightHand.NoteOn()
+                        print(RightHand.NoteOn())
                     if hand_sign_id == 1:
-                        RightHand.NoteOff()
-                    if hand_sign_id == 3:
-                        RightHand.DelMIDI()
+                        print(RightHand.NoteOff())
+#                    if hand_sign_id == 3:
+#                        RightHand.DelMIDI()
                     
         else:
             point_history.append([0, 0])
@@ -595,4 +605,3 @@ def draw_info(image, fps, mode, number):
 
 if __name__ == '__main__':
     main()
-
