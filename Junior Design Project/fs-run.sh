@@ -1,0 +1,1 @@
+fluidsynth -f fluidconfig.txt
