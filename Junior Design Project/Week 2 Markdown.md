@@ -3,7 +3,7 @@
 ### Date: April 2 - April 6
 
 #### Project Focus This Week
-*insert*
+*This week, our primary goal was to begin integrating the MIDI communication system with our gesture recognition code. After setting up the basic hand tracking and MIDI testing in the previous week, we shifted our focus toward linking specific gestures to musical outputs. This included experimenting with Python MIDI libraries (rtmidi), writing functions for various MIDI messages (Note On, Note Off, Control Change, Pitch Bend), and modifying our existing gesture detection code to trigger sounds based on recognized hand signs.*
 
 ## Wednesday, April 2 from 12:45pm - 3:35pm
 
@@ -19,7 +19,8 @@ Continued conducting research and read documentation on how MIDI communication w
 * https://learn.sparkfun.com/tutorials/midi-tutorial/all
 
 MIDI Status codes: [http://www.opensound.com/pguide/midi/midi5.html](http://www.opensound.com/pguide/midi/midi5.html)
-![[Pasted image 20250405220955.png]]
+
+<img src="https://github.com/user-attachments/assets/c0fe040e-7e5d-4781-9908-3aa07fe64246" alt="pic1" width="800"/>
 
 Also worked on integrating the gesture recognition code with MIDI communication.
 * Our initial plan was to first write code to play a single note from a single gesture, and then work on playing around with MIDI and its effects
@@ -28,7 +29,7 @@ Also worked on integrating the gesture recognition code with MIDI communication.
 	* 1. The note plays for a certain duration, but no matter how long the duration is set (i.e. set to the max), the note will eventually fall off until there is no sound. We need to find a way for the note to last until the "stop" gesture is shown and detected.
 	* 2. The code only works for a single note to play, and once the note is stopped we cannot play the note again.
 
-MIDIfunc.py to test speaker output
+Midifunc.py to test speaker output
 ```python
 import time
 import rtmidi
@@ -112,12 +113,30 @@ Updated app.py section with MIDI communication
 
 ## Wednesday, April 2 from 5:00pm - 8:00pm
 
-Continued research on MIDI communication to see the different effects we can do that will be useful to us. Essentially, there are only 8 MIDI messages, but they are pretty versatile in the things they can do. Reference: https://henrybalme.substack.com/p/all-8-midi-messages-explained?r=3qbno3&utm_campaign=post&utm_medium=web&triedRedirect=true
+Continued research on MIDI communication to see the different effects we can do that will be useful to us. Essentially, there are only 8 main types of MIDI messages, but they are pretty versatile and allow for a wide range of expression. Reference: https://henrybalme.substack.com/p/all-8-midi-messages-explained?r=3qbno3&utm_campaign=post&utm_medium=web&triedRedirect=true
+- **Note On/Note Off** – triggers sounds (for example, piano keys).
+- **Control Change** – can control parameters like volume, pan, sustain, etc.
+- **Pitch Bend** – changes pitch, allows smooth sliding between notes.
+- **Channel Aftertouch** – allows modulation based on pressure applied.
+
+Examples:
+
+```python
+sendControlChange(64, 127)  # Sustain pedal on
+SendNote(67)                # Play G4
+sendPB(14000)               # Bend pitch up
+StartNote(60)               # Start C4
+time.sleep(0.5)
+StartNote(72)               # Start C5
+StopNote(60)
+StopNote(72)
+```
+
 
 Also looked into another potential problem, the frame rate.
 * The frame rate is significantly reduced when two hands are on the screen. While it may not be a big issue, there may be even more of a reduction when we add new gestures for the model to recognize. Either way, the max number of hands we should do (and really need) is 2.
-
-*continue*
+* Switching to the 8GB raspberry pi may slightly help this, since more RAM is better multitasking; MediaPipe + OpenCV + Python + camera feed + MIDI output = a lot going on.
+* Could lower camera resolution slightly instead, or maybe even think about tracking one hand if it really becomes an issue.
 
 ## Monday, April 7 from 11:45pm - 3:45pm
 
@@ -140,7 +159,11 @@ Continued working on jupyter notebook for model training
 * Eventually, all jupyter notebook cells compiled properly, but the model training did not reflect the new dataset (i.e. did not add the new "peace sign" gesture) and was not able to detect the new gesture.
 * Continued working on fixing this issue
 
-Model training on jupyter notebook pictures:
+Model training on jupyter notebook:
+
+<img src="https://github.com/user-attachments/assets/a88352d8-4ca9-4884-a03b-c25b9cfd2bb5" alt="pic1" width="750"/>
+<img src="https://github.com/user-attachments/assets/c027cd97-ba9b-4544-a14d-f36a81d9c507" alt="pic2" width="750"/>
+<img src="https://github.com/user-attachments/assets/8583e4c7-4d5a-4544-baf7-5c1430e74635" alt="pic3" width="750"/>
 
 #### 2:00pm - 3:35pm
 *insert fuidsynth stuff explanations and updated code sections*
