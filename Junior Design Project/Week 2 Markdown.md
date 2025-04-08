@@ -106,8 +106,38 @@ def DelMIDI():
 ```
 
 Updated app.py section with MIDI communication
-*insert code*
 ```python
+import MidiFunc as mf
+
+class MIDImsg():
+    def __init__(self, Note, Channel):
+        self.note = Note
+        self.chan = Channel
+        self.status = False
+    
+    def NoteOn(self):
+        if self.status == False:
+            mf.StartNote(self.note)
+            self.status = True
+            return 0
+        else:
+            return 1
+        
+    def NoteOff(self):
+        if self.status == True:
+            self.status = False
+            mf.StopNote(self.note)
+            return 0
+        else:
+            return 1
+        
+    def ChangeNote(self, Note):
+        self.NoteOff()
+        self.note = Note
+        self.NoteOn()
+        
+    def DelMIDI(self):
+        mf.DelMIDI()
 
 ```
 
@@ -165,5 +195,55 @@ Model training on jupyter notebook:
 <img src="https://github.com/user-attachments/assets/c027cd97-ba9b-4544-a14d-f36a81d9c507" alt="pic2" width="750"/>
 <img src="https://github.com/user-attachments/assets/8583e4c7-4d5a-4544-baf7-5c1430e74635" alt="pic3" width="750"/>
 
-#### 2:00pm - 3:35pm
-*insert fuidsynth stuff explanations and updated code sections*
+#### 2:00pm - 7:35pm
+Researched fluidsynth and soundfont libraries in order to play notes with no fading(envelope). The [Hs Synth Collection](https://musical-artifacts.com/artifacts/242) has a collection of instruments with no envelope. Researched how to change fluidsynth settings through the terminal.
+Added code to call a shell script that automatically launches Fluidsynth and sets up the channels for MIDI output. 
+``` python
+import os
+
+My_Cmmnd = "sh fs-run.sh"
+os.system("gnome-terminal -e 'bash -c \"" + My_Cmmnd + ";bash\"'")
+midiout= rtmidi.MidiOut()
+available_ports = midiout.get_ports()
+if available_ports:
+    print("waiting for new fs port...")
+    while True:
+        try:
+            midiout.open_port(2)
+        except:
+            continue
+        else:
+            print("connected to port 2")
+            break
+else:
+    print("No port found")
+    midiout.open_virtual_port("My virtual output")
+```
+
+```shell
+fluidsynth -f fluidconfig.txt
+```
+The fluidconfig.txt file currently has 2 commands to load the soundfont and select an instrument: `load /home/Group6/Downloads/hand-gesture-recognition-mediapipe-main/SoundFonts/HS_Synth_Collection_I.sf2`
+`select 0 2 000 055`
+
+Added code to create the MIDImsg objects and call its functions.
+```python
+#                 handedness.classification[0].index
+#                 if hand_sign_id == 0:
+                #| setup hands to seperate channels |
+                if handedness.classification[0].index == 0:
+                    if LeftHand == None:
+                        LeftHand = MIDImsg(60, 0)
+                    if hand_sign_id == 0:
+                        print(LeftHand.NoteOn())
+                    if hand_sign_id == 1:
+                        print(LeftHand.NoteOff())
+                elif handedness.classification[0].index == 1:
+                    if RightHand == None:
+                        RightHand = MIDImsg(72, 1)
+                    if hand_sign_id == 0:
+                        print(RightHand.NoteOn())
+                    if hand_sign_id == 1:
+                        print(RightHand.NoteOff())
+```
+This code is at the end of the results handling section of the main function in app.py.
