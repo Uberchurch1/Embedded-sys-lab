@@ -35,18 +35,11 @@ def SendNote(Note: int, Velocity: int = 100, Channel: int = 0x00, Duration: int 
 def sendControlChange(cc, value, channel = 0x00):
     midiout.send_message([0xb0 | channel, cc, value])
     
-def sendPB(value, channel = 0x00):
+def PedalBend(value, channel = 0x00):
     lsb = value & 0x7F
     msb = (value >> 7) & 0x7F
     midiout.send_message([0xE0 | channel, lsb, msb])
     
-start = 8192
-end = 16383
-step = 128
-delay = 0.01
-
-
-
 def StartNote(Note: int, Velocity: int = 127, Channel: int = 0x00) -> None:
     noteOn = [0x90 | Channel, Note, Velocity]
     midiout.send_message(noteOn)
@@ -55,23 +48,35 @@ def StopNote(Note: int, Velocity: int = 100, Channel: int = 0x00) -> None:
     noteOff = [0x80 | Channel, Note, Velocity]
     midiout.send_message(noteOff)
 
+def Reverb(value, Channel = 0x00) -> None:
+    midiout.send_message([0xB0 | Channel, 91, value])
+
+def Aftertouch(value, Channel = 0x00) -> None:
+    midiout.send_message([0xD0 | Channel, value, 0])
+
+def Volume(value, Channel = 0x00) -> None:
+    midiout.send_message([0xB0 | Channel, 7, value])
+
 def DelMIDI():
     return None
     del midiout
 
 #with midiout:
+#    Reverb(0)
 #    sendControlChange(64, 127)
-##     SendNote(67)
-##     
-##     for bend in range(start, end + 1, step):
-##         sendPB(bend)
-##         time.sleep(delay)
+#     SendNote(67)
+#     
+#     for bend in range(start, end + 1, step):
+#         sendPB(bend)
+#         time.sleep(delay)
 #    StartNote(60)
 #    time.sleep(0.5)
 #    StartNote(72)
 #    time.sleep(0.5)
 #    StartNote(84)
-#    time.sleep(1)
+#    time.sleep(3)
+#    Reverb(50)
+#    time.sleep(5)
 #    StopNote(60)
 #    StopNote(72)
 #    StopNote(84)
