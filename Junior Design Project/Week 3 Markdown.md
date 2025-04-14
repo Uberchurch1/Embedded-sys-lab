@@ -3,7 +3,7 @@
 ### Date: April 9 - April 14
 
 #### Project Focus This Week
-*insert*
+*This week was mainly all coding and tweaking our main code, app.py, to function properly and match gestures to certain MIDI notes adn effects. We also started planning and talking about preparing for demo day; making the poster, how we would want to set it up, writing instructions, etc.*
 
 ## Wednesday, April 9 from 12:45pm - 3:35pm
 #### 12:45-1:45pm
@@ -41,8 +41,8 @@ https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/
 ## Friday, April 11 from 12:15pm - 4:15pm
 
 Continued working on the app.py code to integrate midi communication with gesture recognition
-* Make OpenCV window bigger (fullscreen)
-* Potentially replace reverb (or move aftertouch/tremolo effect)
+* Made the video window bigger for better clarity (fullscreen), but this increasing the resolution has a noticeable impact on the frame rate. Unless we can reduce the frame rate elsewhere, the video will probably remain 1280x720 or lower.
+* Reverb did not have much effect on the audio, so looked into and tried to implement aftertouch/tremolo effect to replace it.
 
 *Gulliver insert work here*
 
