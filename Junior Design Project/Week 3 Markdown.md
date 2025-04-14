@@ -62,6 +62,8 @@ Continued working on the app.py code to integrate midi communication with gestur
 * Started implementing UI features to show the user what is being changed and how
 	* Added labels to show the horizontal and vertical functions of the gesture and their current values
 	* Added arrows to show the bounding box of value selection for both hands
+ ![ui-test](https://github.com/user-attachments/assets/4fe1fbb5-e5bb-4cb6-9a3e-d4f23cb156b5)
+
 
 ## Monday, April 14 from 12:45pm - 3:35pm
 
