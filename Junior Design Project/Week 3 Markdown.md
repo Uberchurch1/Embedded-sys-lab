@@ -1,0 +1,63 @@
+## Project: Gesture Controlled Music
+### Team: Jayden Okorougo, Anthony Hernandez, Gulliver Brower
+### Date: April 9 - April 14
+
+#### Project Focus This Week
+*insert*
+
+## Wednesday, April 9 from 12:45pm - 3:35pm
+#### 12:45-1:45pm
+Researched and experimented with positions; trying to see if we can track the position of the hand to potentially change the pitch and/or other effects.
+* fluidsynth works successfully and is able to play a continuous note
+* Currently attempting to adjust the pitch on the y-axis, using up and down movement
+
+Code:
+```python
+
+```
+
+Continued working on jupyter notebook to fix model training issues.
+
+Also thinking about whether to stick with having a continuous note and adjusting the effects with distance and gestures, using gestures to play different notes, or some combination of both.
+* How to incorporate the second hand? The code is able to differentiate pretty well between left and right hands, so we could do something different in each hand.
+
+Started figuring out and planning what gestures will be used to play which notes. Currently, the gestures we have are as follows:
+* Open hand: Note on
+* Closed hand: Note off
+* Pointer: unregistered
+* OK sign: unregisterd
+* Peace sign: unregistered
+#### 1:45 - 3:35pm
+Successfully implemented the pitch bend on the y-axis during our test.
+Continued planning on what we would want the gestures to mean.
+* We could have a set of gestures to change the note, and another set of gestures to change the mode.
+* The mode would grant access to different effects on the channel. Since we only have the x and y axis to change, we can have these different modes so that each mode has a different effect on the x and y axis.
+* For example, you could have pitch on the x axis and volume on the y axis for one mode, and then another mode could have reverb on the y axis and aftertouch on the x axis, etc. 
+
+MIDI CC List for Continuous Controllers
+https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/
+* Control Change is able to change the pitch, volume, etc. Useful for a variety of effects.
+
+## Friday, April 11 from 12:15pm - 4:15pm
+
+Continued working on the app.py code to integrate midi communication with gesture recognition
+* Make OpenCV window bigger (fullscreen)
+* Potentially replace reverb (or move aftertouch/tremolo effect)
+
+*Gulliver insert work here*
+
+## Monday, April 14 from 12:45pm - 3:35pm
+
+Continued working on the the app.py code to integrate midi communication with gesture recognition, which is essentially all we have left to fully complete. 
+* Once we are able to get all the effects and "modes" working on each hand gesture, we will be able to tweak and add extra things
+
+Also started early thinking/planning on how we want to demo our project
+* Need to write instructions for other people to try
+* Write the poster explaining our project (could include instructions on the poster)
+* Camera set-up/positioning (Needs to be away from hands so that the camera does not pick up background hands)
+
+
+Added 
+* Vertical: 1-12
+* Horizontal: 0-9
+	* Multiply this number by 12 and add it to the vertical number
