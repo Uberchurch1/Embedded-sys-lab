@@ -59,8 +59,9 @@ https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/
 Continued working on the app.py code to integrate midi communication with gesture recognition
 * Made the video window bigger for better clarity (fullscreen), but this increasing the resolution has a noticeable impact on the frame rate. Unless we can reduce the frame rate elsewhere, the video will probably remain 1280x720 or lower.
 * Reverb did not have much effect on the audio, so looked into and tried to implement aftertouch/tremolo effect to replace it.
-
-*Gulliver insert work here*
+* Started implementing UI features to show the user what is being changed and how
+	* Added labels to show the horizontal and vertical functions of the gesture and their current values
+	* Added arrows to show the bounding box of value selection for both hands
 
 ## Monday, April 14 from 12:45pm - 3:35pm
 
@@ -70,8 +71,9 @@ Continued working on the the app.py code to integrate midi communication with ge
 
 Added Note Change and Octave Change
 * Vertical: 1-12
-	* Selects the note 
+	* Selects the key (A-G#) 
 * Horizontal: 0-9
+  	* Selects the ocatave 0-9
 	* Multiply this number by 12 and add it to the vertical number
  	* Add base 20 since the first 20 does not hold a note
 
