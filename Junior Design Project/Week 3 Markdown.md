@@ -51,13 +51,26 @@ Continued working on the app.py code to integrate midi communication with gestur
 Continued working on the the app.py code to integrate midi communication with gesture recognition, which is essentially all we have left to fully complete. 
 * Once we are able to get all the effects and "modes" working on each hand gesture, we will be able to tweak and add extra things
 
+
+Added Note Change and Octave Change
+* Vertical: 1-12
+	* Selects the note 
+* Horizontal: 0-9
+	* Multiply this number by 12 and add it to the vertical number
+ 	* Add base 20 since the first 20 does not hold a note
+
+Code:
+
+  ```python
+  
+  ```
+
+Worked on Aftertouch/Tremolo Effect
+* Fluidsynth does not support Tremolo effect, so we might try and implement our own tremolo effect using control change and adjusting the volume on and off.
+
 Also started early thinking/planning on how we want to demo our project
 * Need to write instructions for other people to try
 * Write the poster explaining our project (could include instructions on the poster)
 * Camera set-up/positioning (Needs to be away from hands so that the camera does not pick up background hands)
-
-
-Added 
-* Vertical: 1-12
-* Horizontal: 0-9
-	* Multiply this number by 12 and add it to the vertical number
+* Use of a monitor
+* Practice demo
