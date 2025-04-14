@@ -57,6 +57,14 @@ def Aftertouch(value, Channel = 0x00) -> None:
 def Volume(value, Channel = 0x00) -> None:
     midiout.send_message([0xB0 | Channel, 7, value])
 
+def Tremolo(value, Channel = 0x00) -> None:
+    midiout.send_message([0xB0 | Channel, 92, value])
+
+def AllNotesOff() -> None:
+    midiout.send_message([0xB0 | 0, 123, 0])
+    midiout.send_message([0xB0 | 1, 123, 0])
+
+
 def DelMIDI():
     return None
     del midiout
