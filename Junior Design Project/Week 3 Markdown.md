@@ -75,10 +75,22 @@ Added Note Change and Octave Change
 	* Multiply this number by 12 and add it to the vertical number
  	* Add base 20 since the first 20 does not hold a note
 
-Code:
+app.py Note and Octave change code:
 
   ```python
-  
+      def ChangeNote(self, Note):
+        if (Note != self.note):
+            self.NoteOff()
+            self.note = Note
+            self.NoteOn()
+	
+ 	#--Pointer--
+  	if hand_sign_id == 2:
+  	    key = (invrelVPos * 11) + 1
+            octave = relHPos * 9
+  	    Note = key + (octave * 12) + 20
+   	    RightHand.ChangeNote(Note)
+	
   ```
 
 Worked on Aftertouch/Tremolo Effect
