@@ -11,9 +11,25 @@ Researched and experimented with positions; trying to see if we can track the po
 * fluidsynth works successfully and is able to play a continuous note
 * Currently attempting to adjust the pitch on the y-axis, using up and down movement
 
-Code:
+Midifunc.py pitch code:
 ```python
+def PedalBend(value, channel = 0x00):
+    lsb = value & 0x7F
+    msb = (value >> 7) & 0x7F
+    midiout.send_message([0xE0 | channel, lsb, msb])
+```
 
+app.py pitch code:
+```python
+def PBend(self, value, rel=False):
+        if rel==True:
+            val = int(16384*value)
+        mf.PedalBend(val, self.chan)
+
+	#--Open--
+	if hand_sign_id == 0:
+	    RightHand.NoteOn()
+	    RightHand.PBend(relVPos, rel=True)
 ```
 
 Continued working on jupyter notebook to fix model training issues.
