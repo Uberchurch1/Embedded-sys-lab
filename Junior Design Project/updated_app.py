@@ -43,9 +43,11 @@ class MIDImsg():
             return 1
         
     def ChangeNote(self, Note):
-        self.NoteOff()
-        self.note = Note
-        self.NoteOn()
+        if (Note != self.note):
+            self.NoteOff()
+            self.note = Note
+            self.NoteOn()
+        
 
     def ChangeOctave(self, Oct):
         return None
@@ -62,11 +64,23 @@ class MIDImsg():
         mf.Reverb(val, self.chan)
         print(f"|Reverb| --value: {value} --val: {val} --rel: {rel}")
 
+    def Volume(self, value, rel=False):
+        if rel:
+            val = int(127*value)
+        mf.Volume(val, self.chan)
+        print(f"|Volume| --value: {value} --val: {val} --rel: {rel}")
+
 
     def Aftertouch(self, value, rel=False):
         if rel:
             val = int(127*value)
         mf.Aftertouch(val, self.chan)
+
+    def Tremolo(self, value, rel=False):
+        if rel:
+            val = int(127*value)
+        mf.Tremolo(val, self.chan)
+        
 
     def DelMIDI(self):
         mf.DelMIDI()
@@ -244,7 +258,9 @@ def main():
                 if handedness.classification[0].index == 0:
                     print("====Left Hand====")
                     relHPos = max(0, abs(brect[2]-(cap_width/2))/((cap_width-120)/2))
-                    relVPos = max(0, brect[1]/cap_height)                    
+                    relVPos = max(0, brect[1]/cap_height)    
+                    invrelVPos = max(0, abs(brect[1]-cap_height)/cap_height)
+                
                     #--init--
                     if LeftHand == None:
                         LeftHand = MIDImsg(60, 0)
@@ -252,25 +268,30 @@ def main():
                     if hand_sign_id == 0:
                         LeftHand.NoteOn()
                         LeftHand.PBend(relVPos, rel=True)
-                        LeftHand.Reverb(relHPos, rel=True)
-                        ValH = [0, valH]
-                        ValV = [1, valV]
+                        #LeftHand.Reverb(relHPos, rel=True)
+                        #ValH = [0, valH]
+                        #ValV = [1, valV]
 
                     #--Close--
                     if hand_sign_id == 1:
                         LeftHand.NoteOff()
                     #--Pointer--
-#                    if hand_sign_id == 2:
+                    if hand_sign_id == 2:
+                        key = (invrelVPos * 11) + 1
+                        octave = relHPos * 9
+                        Note = key + (octave * 12) + 20
+                        LeftHand.ChangeNote(Note)
 
                     #--OK--
-#                    if hand_sign_id == 3:
-#                        LeftHand.Volume(relVPos, rel=True)
-#                        LeftHand.Aftertouch(relHPos, rel=True)
+                    if hand_sign_id == 3:
+                        LeftHand.Volume(invrelVPos, rel=True)
+                                                
                 #----|Right Hand|----
                 elif handedness.classification[0].index == 1:
                     print("====Right Hand====")
                     relHPos = max(0, abs(brect[0]-(cap_width/2))/((cap_width-120)/2))
                     relVPos = max(0, brect[1]/cap_height)
+                    invrelVPos = max(0, abs(brect[1]-cap_height)/cap_height)
                     #--Init--
                     if RightHand == None:
                         RightHand = MIDImsg(64, 1)
@@ -278,21 +299,38 @@ def main():
                     if hand_sign_id == 0:
                         RightHand.NoteOn()
                         RightHand.PBend(relVPos, rel=True)
-                        RightHand.Reverb(relHPos, rel=True)
+                        RightHand.Aftertouch(relHPos, rel=True)
+                        #RightHand.Reverb(relHPos, rel=True)
+                        RightHand.Tremolo(relHPos, rel=True )
                     #--Close--
                     if hand_sign_id == 1:
                         RightHand.NoteOff()
                     #--Pointer--
+                    if hand_sign_id == 2:
+                        key = (invrelVPos * 11) + 1
+                        octave = relHPos * 9
+                        Note = key + (octave * 12) + 20
+                        RightHand.ChangeNote(Note)
 
                     #--OK--
-#                    if hand_sign_id == 3:
-#                        RightHand.DelMIDI()
-                    
+                    if hand_sign_id == 3:
+                         RightHand.Volume(invrelVPos, rel=True)
+                   
         else:
             point_history.append([0, 0])
+            mf.AllNotesOff()
+
+
+        window_width = 1280
+        window_height = 720
+
+        cv.namedWindow('Hand Gesture Recognition', cv.WINDOW_NORMAL)
+        cv.resizeWindow('Hand Gesture Recognition', window_width, window_height)
 
         debug_image = draw_point_history(debug_image, point_history)
         debug_image = draw_info(debug_image, fps, mode, number)
+
+        debug_image = cv.resize(debug_image, (window_width, window_height))
 
         # Screen reflection #############################################################
         cv.imshow('Hand Gesture Recognition', debug_image)
