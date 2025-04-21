@@ -18,7 +18,9 @@ from model import PointHistoryClassifier
 import MidiFunc as mf
 
 global ValDict
-ValDict = ["Reverb", "Pedal Bend", "Octave", "Note", "Aftertouch", "Volume"]
+global noteDict
+noteDict = ['A','A#/Bb','B','C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab']
+ValDict = ["", "Pedal Bend", "Octave", "Note", "Aftertouch", "Volume", "Note Off"]
 
 class MIDImsg():
     def __init__(self, Note, Channel):
@@ -57,18 +59,20 @@ class MIDImsg():
             val = int(16384*value)
         mf.PedalBend(val, self.chan)
 #        print(f"|Pedal Bend| --value: {value} --val: {val} --rel: {rel}")
+        return val
 
     def Reverb(self, value, rel=False):
         if rel:
             val = int(127*value)
         mf.Reverb(val, self.chan)
-        print(f"|Reverb| --value: {value} --val: {val} --rel: {rel}")
+#        print(f"|Reverb| --value: {value} --val: {val} --rel: {rel}")
 
     def Volume(self, value, rel=False):
         if rel:
             val = int(127*value)
         mf.Volume(val, self.chan)
-        print(f"|Volume| --value: {value} --val: {val} --rel: {rel}")
+#        print(f"|Volume| --value: {value} --val: {val} --rel: {rel}")
+        return val
 
 
     def Aftertouch(self, value, rel=False):
@@ -80,6 +84,8 @@ class MIDImsg():
         if rel:
             val = int(127*value)
         mf.Tremolo(val, self.chan)
+        print(f"|Tremolo| --value: {value} --val: {val} --rel: {rel}")
+
         
 
     def DelMIDI(self):
@@ -98,7 +104,7 @@ def get_args():
     parser.add_argument("--min_detection_confidence",
                         help='min_detection_confidence',
                         type=float,
-                        default=0.7)
+                        default=0.5)
     parser.add_argument("--min_tracking_confidence",
                         help='min_tracking_confidence',
                         type=int,
@@ -176,10 +182,11 @@ def main():
     
 
     while True:
+        global noteDict
         fps = cvFpsCalc.get()
 
         # Process Key (ESC: end) #################################################
-        key = cv.waitKey(10)
+        key = cv.waitKey(1)
         if key == 27:  # ESC
             break
         number, mode = select_mode(key, mode)
@@ -236,18 +243,7 @@ def main():
                 most_common_fg_id = Counter(
                     finger_gesture_history).most_common()
 
-                # Drawing part
-                debug_image = draw_bounding_rect(use_brect, debug_image, brect)
-                debug_image = draw_landmarks(debug_image, landmark_list)
-                debug_image = draw_info_text(
-                    debug_image,
-                    brect,
-                    handedness,
-                    keypoint_classifier_labels[hand_sign_id],
-                    point_history_classifier_labels[most_common_fg_id[0][0]],
-                    args,
-                    [False, False, False, False, [0,0], [0,0],[0,0]]
-                )
+                
                 
                 #|------------------|#
 #                 handedness.classification[0].index
@@ -267,13 +263,14 @@ def main():
                     #--Open--
                     if hand_sign_id == 0:
                         LeftHand.NoteOn()
-                        LeftHand.PBend(relVPos, rel=True)
-                        #LeftHand.Reverb(relHPos, rel=True)
-                        #ValH = [0, valH]
-                        #ValV = [1, valV]
+                        val = LeftHand.PBend(relVPos, rel=True)
+                        ValH = [0, 0]
+                        ValV = [1, val]
 
                     #--Close--
                     if hand_sign_id == 1:
+                        ValH=[6, 0]
+                        ValV = [0,0]
                         LeftHand.NoteOff()
                     #--Pointer--
                     if hand_sign_id == 2:
@@ -281,10 +278,15 @@ def main():
                         octave = relHPos * 9
                         Note = key + (octave * 12) + 20
                         LeftHand.ChangeNote(Note)
+                        ValH = [2, octave]
+                        ValV = [3, noteDict[int(key-1)]]
 
                     #--OK--
                     if hand_sign_id == 3:
-                        LeftHand.Volume(invrelVPos, rel=True)
+                        val = LeftHand.Volume(invrelVPos, rel=True)
+                        ValH = [0,0]
+                        ValV = [5,val]
+
                                                 
                 #----|Right Hand|----
                 elif handedness.classification[0].index == 1:
@@ -297,13 +299,17 @@ def main():
                         RightHand = MIDImsg(64, 1)
                     #--Open--
                     if hand_sign_id == 0:
+                        ValH = [0, 0]
                         RightHand.NoteOn()
-                        RightHand.PBend(relVPos, rel=True)
-                        RightHand.Aftertouch(relHPos, rel=True)
+                        val = RightHand.PBend(relVPos, rel=True)
+                        ValV = [1,val]
+                        #RightHand.Aftertouch(relHPos, rel=True)
                         #RightHand.Reverb(relHPos, rel=True)
-                        RightHand.Tremolo(relHPos, rel=True )
+                        #RightHand.Tremolo(relHPos, rel=True )
                     #--Close--
                     if hand_sign_id == 1:
+                        ValH = [6, 0]
+                        ValV = [0, 0]
                         RightHand.NoteOff()
                     #--Pointer--
                     if hand_sign_id == 2:
@@ -311,11 +317,27 @@ def main():
                         octave = relHPos * 9
                         Note = key + (octave * 12) + 20
                         RightHand.ChangeNote(Note)
+                        ValH = [2, octave]
+                        ValV = [3, noteDict[int(key-1)]]
 
                     #--OK--
                     if hand_sign_id == 3:
-                         RightHand.Volume(invrelVPos, rel=True)
-                   
+                         val = RightHand.Volume(invrelVPos, rel=True)
+                         ValH = [0,0]
+                         ValV = [5,val]
+
+                # Drawing part
+                debug_image = draw_bounding_rect(use_brect, debug_image, brect)
+                debug_image = draw_landmarks(debug_image, landmark_list)
+                debug_image = draw_info_text(
+                    debug_image,
+                    brect,
+                    handedness,
+                    keypoint_classifier_labels[hand_sign_id],
+                    point_history_classifier_labels[most_common_fg_id[0][0]],
+                    args,
+                    [False, False, False, False, [0,0], ValH,ValV]
+                )   
         else:
             point_history.append([0, 0])
             mf.AllNotesOff()
@@ -634,24 +656,6 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
     global ValDict
     cap_width = args.width
     cap_height = args.height
-
-    HText = ""
-    VText = ""
-
-    if UIText[0] == True:
-        HText += handedness.classification[0].label[0:]
-    if UIText[1] == True:
-        HText += ':' + hand_sign_text
-    if UIText[3] == True:
-        HText += '\n'
-        HText += ValDict[UIText[5][0]] + ':' + UIText[5][1]
-
-    if UIText[2] == True:
-        VText += "X:" + UIText[4][0] + "Y:" + UIText[4][1] 
-    if UIText[3] == True:
-        VText += '\n'
-        VText += ValDict[UIText[6][0]] + ':' + UIText[6][1]
-
     cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[1] - 22),
                  (1, 0, 0), -1)
 
@@ -689,11 +693,18 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
     #cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
 
     if finger_gesture_text != "":
-        cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
-                   cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 4, cv.LINE_AA)
-        cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
-                   cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
-                   cv.LINE_AA)
+        if handedness.classification[0].index == 0:
+            cv.putText(image, "Finger Gesture:" + hand_sign_text, (10, 100),
+                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 4, cv.LINE_AA)
+            cv.putText(image, "Finger Gesture:" + hand_sign_text, (10, 100),
+                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
+                    cv.LINE_AA)
+        else:
+            cv.putText(image, "Finger Gesture:" + hand_sign_text, (10, 60),
+                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 4, cv.LINE_AA)
+            cv.putText(image, "Finger Gesture:" + hand_sign_text, (10, 60),
+                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
+                    cv.LINE_AA)
 
     return image
 
