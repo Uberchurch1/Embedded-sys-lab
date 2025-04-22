@@ -1,6 +1,6 @@
 ## Project: Gesture Controlled Music
 ### Team: Jayden Okorougo, Anthony Hernandez, Gulliver Brower
-### Date: April 15 - April 20
+### Date: April 15 - April 21
 
 #### Project Focus This Week
 *As we near the end of the project, this week we will be focusing on completing the gesture recognition modes and effects, cleaning up the code so that labels, sizing, and other gui aspects are corrected, and planning for demo day.*
