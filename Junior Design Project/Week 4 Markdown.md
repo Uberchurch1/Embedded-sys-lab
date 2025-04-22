@@ -16,8 +16,8 @@
 #### 12:45-2:30pm
 Worked on getting the tremolo effect to work
 * Since fluidsynth does not have a native tremolo effect (or aftertouch for that matter), we needed to manually implement it
-* Tremolo effect is essentially just a changing of volume based on the frequency?
-* Our original implementation, tried to create multiple threads to adjust the volume (which is essentially what tremolo is), but this caused the frame rate to drop significantly. It was really bad, probably because of the numerous thread creations.
+* Tremolo is essentially created by quickly changing the volume up and down to produce a wavering sound
+* Our original implementation tried to create multiple threads to adjust the volume, but this caused the frame rate to drop significantly.
 
 We decided to look at and test other effects that could replace tremolo:
 * Expression (which is a percentage of volume)
@@ -41,9 +41,9 @@ Decided to move on to the UI design of the project. We focused on fixing the lab
 
 #### 11:45 - 12:45
 Worked on fixing labels and improving fps; would drop to 5-6 fps when detecting hands and 8-10 without detecting hands. The original code had 15+ fps even when detecting hands.
-* Most likely has to dow with all the extra code (MIDI functions, etc.) that we added
+* Most likely has to do with all the extra code (MIDI functions, etc.) that we added
 * Changed the line `cv.waitKey(10)` to `cv.waitKey(1)`, which helped improve the fps slightly
-* Changed the line `min_detection_confidence=0.5 and min_tracking_confidence=0.5` to `min_detection_confidence=0.7 and min_tracking_confidence=0.7` which also helped a little but
+* Changed the line `min_detection_confidence=0.5 and min_tracking_confidence=0.5` to `min_detection_confidence=0.7 and min_tracking_confidence=0.7` which also helped a little bit
 * Will continue to look into other solutions , but for now I think it is still acceptable for the demo
 
 #### 12:45 - 3:45
@@ -77,4 +77,4 @@ Also kept working on model training issues. We realized when labeling that the l
 * Jupyter notebook, which is where the model training is done, continues to give errors when trying to train the model to add more data or gestures
 * Worked on fixing this but with no luck
 * Tried to redownload the files again from the github repo to see if our jupyter notebook was messed up from us trying to fix it, and to see if the original code did have the "OK" symbol on the left hand, but we realized that the original code also had this problem
-* Will keep working on it, but it is not a major issue; the only function we have mapped to OK is volume, so we can just leave that as the only right hand function if need be
+* Will keep working on it, but it is not a major issue; the only function we have mapped to OK is volume, so we can just leave that as the only right hand function if need be.
